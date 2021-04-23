@@ -57,6 +57,8 @@ $Global:EmailBody = "New Application Updates Packaged on $(Get-Date -Format d)`n
 $Global:SendEmail = $false
 $Global:TemplateApplicationCreatedFlag = $false
 
+$ExcludeRecipes = '_*', 'template.xml'
+
 ## Functions
 function Add-LogContent {
 	param
@@ -1132,7 +1134,7 @@ Add-LogContent "Allowing All Cookies to Download (This prevents the script from 
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3" /t REG_DWORD /v 1A10 /f /d 0
 
 ## Get the Recipes
-$RecipeList = Get-ChildItem $ScriptRoot\Recipes\ | Select-Object -Property Name -ExpandProperty Name | Where-Object -Property Name -NE "Template.xml" | Sort-Object -Property Name
+$RecipeList = Get-ChildItem $ScriptRoot\Recipes\ -exclude $ExcludeRecipes | Select-Object -Property Name -ExpandProperty Name | Sort-Object -Property Name
 Add-LogContent -Content "All Recipes: $RecipeList"
 
 ## Begin Looping through all the Recipes 
